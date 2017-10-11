@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.github.mzule.fantasyslide.FantasyDrawerLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+
+        android:id="@+id/drawerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ru.noties.scrollable.ScrollableLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/scrollable_layout"
+                app:scrollable_maxScroll="200dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                    android:background="#654321"
+                    android:textColor="#ffffff"
+                    android:textSize="30sp"
+                    android:text="Header"
+                    android:id="@+id/header"
+                    android:gravity="center"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <github.chenupt.springindicator.SpringIndicator
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            app:siTextSize="18sp"
+                            app:siIndicatorColors="@array/indicator_colors"
+                            app:siTextColor="@color/colorPrimaryDark"
+                            app:siSelectedTextColor="@android:color/white"
+                            app:siIndicatorColor="@color/colorPrimary"
+                            android:id="@+id/indicator"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <com.example.anew.MyViewPager
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:id="@+id/view_pager" />
+
+            </ru.noties.scrollable.ScrollableLayout>
+        </LinearLayout>
+
+
+        <com.github.mzule.fantasyslide.SideBar
+            android:id="@+id/leftSideBar"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/colorPrimary"
+            app:maxTranslationX="66dp">
+
+            <!-- 这里是 SideBar 的子视图-->
+
+                <TextView
+                    android:text="开启服务"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/start"
+                    android:drawablePadding="10dp"
+                    android:textSize="18sp"
+                    android:padding="14dp"
+                    android:textColor="#ffffff"
+                    />
+
+                <TextView
+                    android:text="更新任务"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/updateMission"
+                    android:drawablePadding="10dp"
+                    android:textSize="18sp"
+                    android:padding="14dp"
+                    android:textColor="#ffffff"/>
+
+                <TextView
+                    android:text="查看任务"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/seeMission"
+                    android:drawablePadding="10dp"
+                    android:textSize="18sp"
+                    android:padding="14dp"
+                    android:textColor="#ffffff"/>
+
+                <TextView
+                    android:text="改变锁定状态"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/changeLock"
+                    android:drawablePadding="10dp"
+                    android:textSize="18sp"
+                    android:padding="14dp"
+                    android:textColor="#ffffff"
+                    />
+                <TextView
+                    android:text="改变暂停状态"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/changePause"
+                    android:drawablePadding="10dp"
+                    android:textSize="18sp"
+                    android:padding="14dp"
+                    android:textColor="#ffffff"
+                    />
+
+
+        </com.github.mzule.fantasyslide.SideBar>
+        <!-- 如果需要的话，可以添加右侧边栏-->
+    </com.github.mzule.fantasyslide.FantasyDrawerLayout>
+
+    <com.scalified.fab.ActionButton
+        android:id="@+id/addMissions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+
+
+        fab:type="DEFAULT"
+        fab:button_color="@color/colorPrimaryDark"
+        fab:button_colorPressed="@color/fab_material_lime_900"
+        fab:image="@drawable/fab_plus_icon"
+        fab:image_size="24dp"
+        fab:shadow_color="#757575"
+        fab:shadow_radius="1.0dp"
+        fab:shadow_xOffset="0.5dp"
+        fab:shadow_yOffset="1.0dp"
+        fab:stroke_color="@color/fab_material_blue_grey_500"
+        fab:stroke_width="1.0dp"
+        fab:button_colorRipple="@color/fab_material_black"
+        fab:rippleEffect_enabled="false"
+        fab:shadowResponsiveEffect_enabled="true"
+        fab:show_animation="@anim/fab_roll_from_down"
+        fab:hide_animation="@anim/fab_roll_to_down"
+        />
+</RelativeLayout>
+

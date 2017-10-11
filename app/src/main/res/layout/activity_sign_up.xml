@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.anew.Activity.SignUpActivity">
+
+    <ImageView
+        android:id="@+id/myImage"
+        android:layout_width="70dip"
+        android:layout_height="70dip"
+        android:layout_marginTop="65dip"
+        android:layout_centerHorizontal="true"
+        />
+    <EditText
+        android:id="@+id/phoneNum"
+        android:layout_marginLeft="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="60dp"
+        android:inputType="number"
+        android:layout_marginRight="30dp"
+        android:layout_below="@+id/myImage"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="手机号"
+        android:textSize="8pt"
+        android:textColor="@android:color/darker_gray"
+        android:layout_alignLeft="@+id/phoneNum"
+        android:layout_alignTop="@+id/phoneNum"
+
+        android:layout_marginTop="9dip"
+
+        android:layout_marginLeft="3dip"/>
+
+
+
+
+
+
+    <Button
+        android:id="@+id/MessageButton"
+        android:layout_width="match_parent"
+
+        android:layout_height="35dip"
+        android:layout_below="@+id/phoneNum"
+        android:layout_alignLeft="@+id/phoneNum"
+        android:layout_alignRight="@+id/phoneNum"
+        android:layout_marginTop="20dip"
+
+        android:background="@drawable/fillet_shape"
+        android:text="发送验证码"
+        android:textColor="@android:color/white"/>
+
+</RelativeLayout>
+

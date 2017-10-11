@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="indicator_colors">
+        <item>#ffffff</item>
+        <item>#123456</item>
+        <item>#567894</item>
+        <item>#543678</item>
+    </array>
+
+</resources>
