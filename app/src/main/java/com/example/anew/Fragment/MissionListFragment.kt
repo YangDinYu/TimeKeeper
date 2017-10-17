@@ -8,16 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.anew.R
-import kotlinx.android.synthetic.main.fragment_layout.*
 import android.widget.TextView
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.support.v7.widget.RecyclerView
 import android.widget.Toast
-import cn.bmob.v3.Bmob.getApplicationContext
 import com.example.anew.Misson
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener
-
-
+import kotlinx.android.synthetic.main.activity_main.*
+import com.example.anew.Activity.MainActivity
 
 
 
@@ -32,11 +30,14 @@ class MissionListFragment: Fragment() {
         dataList = list;
     }
 
+
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater?.inflate(R.layout.fragment_layout, container, false);
         recyclerView = view!!.findViewById(R.id.recyclerView) as RecyclerView;
         recyclerView.layoutManager = LinearLayoutManager(this.activity) as RecyclerView.LayoutManager?;
         recyclerView.adapter = HomeAdapter();
+
 
         var onTouchListener = RecyclerTouchListener(this@MissionListFragment.activity, recyclerView);
         onTouchListener
@@ -44,7 +45,10 @@ class MissionListFragment: Fragment() {
                 .setViewsToFade(R.id.rowButton)
                 .setClickable(object : RecyclerTouchListener.OnRowClickListener {
                     override fun onRowClicked(position: Int) {
-                        Toast.makeText(this@MissionListFragment.activity.applicationContext, "Row " + (position + 1) + " clicked!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this@MissionListFragment.activity.applicationContext, "Page"+activity.view_pager.currentItem+"Row " + (position + 1) + " clicked!",Toast.LENGTH_SHORT).show();
+
+
+                        (activity as MainActivity).initAlertDialog(activity.view_pager.currentItem,position);
                     }
 
                     override fun onIndependentViewClicked(independentViewID: Int, position: Int) {

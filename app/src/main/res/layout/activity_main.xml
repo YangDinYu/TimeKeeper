@@ -68,60 +68,61 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="@color/colorPrimary"
-            app:maxTranslationX="66dp">
+            app:maxTranslationX="66dp"
+            >
 
             <!-- 这里是 SideBar 的子视图-->
 
                 <TextView
+                    android:drawableLeft="@mipmap/coupon"
+                    style="@style/MenuText"
                     android:text="开启服务"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/start"
-                    android:drawablePadding="10dp"
-                    android:textSize="18sp"
-                    android:padding="14dp"
-                    android:textColor="#ffffff"
+
+
                     />
 
                 <TextView
+                    android:drawableLeft="@mipmap/coupon"
+                    style="@style/MenuText"
                     android:text="更新任务"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/updateMission"
-                    android:drawablePadding="10dp"
-                    android:textSize="18sp"
-                    android:padding="14dp"
-                    android:textColor="#ffffff"/>
+
+                    />
 
                 <TextView
+                    android:drawableLeft="@mipmap/coupon"
+                    style="@style/MenuText"
                     android:text="查看任务"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/seeMission"
                     android:drawablePadding="10dp"
-                    android:textSize="18sp"
-                    android:padding="14dp"
-                    android:textColor="#ffffff"/>
+                    />
 
                 <TextView
+                    android:drawableLeft="@mipmap/coupon"
+                    style="@style/MenuText"
                     android:text="改变锁定状态"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/changeLock"
-                    android:drawablePadding="10dp"
-                    android:textSize="18sp"
-                    android:padding="14dp"
-                    android:textColor="#ffffff"
+
+
+
                     />
                 <TextView
+                    android:drawableLeft="@mipmap/coupon"
+                    style="@style/MenuText"
                     android:text="改变暂停状态"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/changePause"
-                    android:drawablePadding="10dp"
-                    android:textSize="18sp"
-                    android:padding="14dp"
-                    android:textColor="#ffffff"
+
                     />
 
 

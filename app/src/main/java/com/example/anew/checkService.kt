@@ -55,6 +55,7 @@ class checkService : Service() {
         var hour = time.hour;
         var min = time.minute;
         Log.i("时间信息","2017.$month . $day,$hour:$min");
+
         while (Message.missionList.size>0 && Message.missionList[0]!=null){
             if (Message.missionList[0].month<month || Message.missionList[0].day<day ){
                 Message.missionList.removeAt(0);
@@ -65,13 +66,13 @@ class checkService : Service() {
                 Message.missionList.removeAt(0);
 
 
-            }
-            else {
-                editor.putString("MissionList", gson.toJson(Message.missionList));
-                editor.commit()
+            }else{
                 break;
             }
+
         }
+        editor.putString("MissionList", gson.toJson(Message.missionList));
+        editor.commit()
 
         //根据任务时间分到今天、明天、后天任务中
         Message.missionListHoutian.clear();
@@ -168,18 +169,22 @@ class checkService : Service() {
                     //如果处于任务时间之内，则将锁定标记改为true
                     var time = android.text.format.Time();
                     time.setToNow();
-                    var month = time.month;
+                    var month = time.month+1;
                     var day = time.monthDay;
                     var hour = time.hour;
                     var min = time.minute;
+                    //Log.i("表达式测试：","${Message.missionList.size },${Message.missionList[0]?.isLock == true},${Message.missionList[0]?.month == month},${ Message.missionList[0]?.day == day},${hour>Message.missionList[0]?.startHour},${min>Message.missionList[0]?.startMin},${((hour - Message.missionList[0]?.startHour) * 60 + min - Message.missionList[0]?.startMin - Message.missionList[0]?.duration) < 0},");
                     if (Message.missionList.size > 0
                             && Message.missionList[0].isLock == true
                             && Message.missionList[0].month == month
                             && Message.missionList[0].day == day
-                            && hour>Message.missionList[0].startHour
-                            && min>Message.missionList[0].startMin
+                            && hour>=Message.missionList[0].startHour
+                            && min>=Message.missionList[0].startMin
                             && ((hour - Message.missionList[0].startHour) * 60 + min - Message.missionList[0].startMin - Message.missionList[0].duration) < 0) {
                         Message.isLock = true;
+
+
+
                         Log.i("", "处于第一个任务之中，开始锁定");
                     }
 
@@ -191,7 +196,8 @@ class checkService : Service() {
                         Message.isLock = false;
                         Message.missionList.removeAt(0);
                         editor.putString("MissionList", Gson().toJson(Message.missionList));
-                        editor.commit()
+                        editor.commit();
+                        updateData();
                         Log.i("", "第一个任务结束了，去掉锁定");
                     }
 

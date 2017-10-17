@@ -8,13 +8,8 @@ import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import com.example.anew.Fragment.MyFragmentPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-import com.example.anew.Message
-import com.example.anew.Misson
-import com.example.anew.R
-import com.example.anew.checkService
 import com.github.mzule.fantasyslide.SimpleFantasyListener
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -29,9 +24,8 @@ import android.support.v4.widget.PopupWindowCompat.showAsDropDown
 import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AlertDialog
 import android.view.*
-import android.widget.EditText
-import android.widget.PopupWindow
-import android.widget.TimePicker
+import android.widget.*
+import com.example.anew.*
 import com.necer.ncalendar.calendar.WeekCalendar
 
 import com.scalified.fab.ActionButton
@@ -40,6 +34,7 @@ import org.joda.time.DateTime
 import com.necer.ncalendar.listener.OnCalendarChangedListener
 import com.necer.ncalendar.listener.OnClickWeekViewListener
 import com.necer.ncalendar.listener.OnWeekCalendarChangedListener
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -72,6 +67,8 @@ class MainActivity : AppCompatActivity() {
         pagerAdapter = MyFragmentPagerAdapter(supportFragmentManager)
         view_pager.adapter = pagerAdapter;
         view_pager.currentItem = 1;
+
+
 
         indicator.setViewPager(view_pager);
 
@@ -106,7 +103,10 @@ class MainActivity : AppCompatActivity() {
 
 
         leftSideBar.setFantasyListener(object :SimpleFantasyListener(){
-            fun onHover( view: View): Boolean {
+
+
+            override fun onHover(view: View?, index: Int): Boolean {
+
                 return false;
             }
 
@@ -124,7 +124,9 @@ class MainActivity : AppCompatActivity() {
             override fun onClick(p0: View?) {
                 //startActivity(Intent(this@MainActivity,AddMissionActivity::class.java));
                 //initPopWindow(p0!!);
-                initAlertDialog(this@MainActivity);
+
+                initAlertDialog(-1,-1);
+
             }
 
         })
@@ -216,14 +218,14 @@ class MainActivity : AppCompatActivity() {
                 Message.missionList.removeAt(0);
 
 
-            }
-            else {
-                editor.putString("MissionList", gson.toJson(Message.missionList));
-                editor.commit()
+            }else{
                 break;
             }
-        }
 
+        }
+        editor.putString("MissionList", gson.toJson(Message.missionList));
+        editor.commit()
+        Log.i("清理过后,ListLen",""+Message.missionList.size);
         //根据任务时间分到今天、明天、后天任务中
         Message.missionListHoutian.clear();
         Message.missionListTomorro.clear();
@@ -246,15 +248,65 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun initAlertDialog(context: Context){
-        var builder = AlertDialog.Builder(context);
+    public fun initAlertDialog(page:Int, row:Int){
+        var builder = AlertDialog.Builder(this@MainActivity);
         val view = LayoutInflater.from(this@MainActivity).inflate(R.layout.addmission_layout, null, false);
         builder.setView(view);
-        builder.setTitle("添加新任务");
+        var mission = Misson("");
+        var title = "";
+        var posButtonText = "";
+
+        var list: java.util.ArrayList<Misson>;
+
+        when(page){
+            -1-> {
+                list = java.util.ArrayList();
+            }
+            0->{list=Message.missionListToday}
+            1->{list=Message.missionListTomorro}
+            2->{list=Message.missionListHoutian}
+            else->{
+                list = java.util.ArrayList();
+            }
+        }
+
+        //判断是修改事件的调用还是添加按钮的调用
+        if(page>=0){
+            title = "修改计划任务"
+            posButtonText = "确认"
+
+            (view.findViewById(R.id.missionName) as EditText).setText(list[row].missonName);
+            (view.findViewById(R.id.missionDetail) as EditText).setText(list[row].missonDetail);
+            (view.findViewById(R.id.durationEdit) as EditText).setText(list[row].duration.toString());
+            var time = android.text.format.Time();
+            time.setToNow();
+
+            val list2 = java.util.ArrayList<String>()
+            list2.add(""+time.year+"-"+(time.month+1)+"-"+(time.monthDay+page));
+
+            (view.findViewById(R.id.ncalendar) as WeekCalendar).setDefaultSelect(false);
+            Log.i("time",""+time.year+"-"+(time.month+1)+"-"+(time.monthDay+page));
+
+
+            (view.findViewById(R.id.ncalendar) as WeekCalendar).setDate(""+time.year+"-"+(time.month+1)+"-"+(time.monthDay+page));
+            (view.findViewById(R.id.ncalendar) as WeekCalendar).setPointList(list2);
+
+            (view.findViewById(R.id.timePicker) as TimePicker).hour = list[row].startHour ;
+            (view.findViewById(R.id.timePicker) as TimePicker).minute = list[row].startMin;
+
+
+            (view.findViewById(R.id.isLock) as Switch).isChecked = list[row].isLock;
+        }
+        //添加按钮的调用
+        else{
+            title = "添加新任务"
+            posButtonText = "添加"
+        }
+        builder.setTitle(title);
 
 
         //设置取消按钮的点击事件。。反正啥都不干
-        builder.setNegativeButton("取消",object :DialogInterface.OnClickListener{
+        builder.setNegativeButton("取消",object : DialogInterface.OnClickListener{
             override fun onClick(p0: DialogInterface?, p1: Int) {
 
             }
@@ -262,8 +314,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         //设置添加按钮的点击事件
-        var mission = Misson("");
-        builder.setPositiveButton("添加",object :DialogInterface.OnClickListener{
+
+        builder.setPositiveButton(posButtonText,object : DialogInterface.OnClickListener{
             override fun onClick(p0: DialogInterface?, p1: Int) {
                 //获得当前时间
                 var time = android.text.format.Time();
@@ -279,9 +331,21 @@ class MainActivity : AppCompatActivity() {
 
                 mission.startHour = (view.findViewById(R.id.timePicker) as TimePicker).hour
                 mission.startMin = (view.findViewById(R.id.timePicker) as TimePicker).minute
-                mission.duration = 3;
-                mission.isLock = true;
+                mission.duration = ("0"+(view.findViewById(R.id.durationEdit) as EditText).text.toString()).toInt();
 
+                mission.isLock = (view.findViewById(R.id.isLock) as Switch).isChecked;
+
+                when(page){
+                    0->{
+                        Message.missionList.removeAt(row);
+                    }
+                    1->{
+                        Message.missionList.removeAt(Message.missionListToday.size+row);
+                    }
+                    2->{
+                        Message.missionList.removeAt(Message.missionListToday.size+Message.missionListTomorro.size+row);
+                    }
+                }
 
                 Message.missionList.add(mission);
                 Collections.sort(Message.missionList);
@@ -295,11 +359,12 @@ class MainActivity : AppCompatActivity() {
                 pagerAdapter.myFragment1?.recyclerView?.adapter?.notifyDataSetChanged();
                 pagerAdapter.myFragment2?.recyclerView?.adapter?.notifyDataSetChanged();
                 pagerAdapter.myFragment3?.recyclerView?.adapter?.notifyDataSetChanged();
+
             }
 
         })
         //设置日历选择的监听事件
-        (view.findViewById(R.id.ncalendar) as WeekCalendar).setOnWeekCalendarChangedListener(object :OnWeekCalendarChangedListener{
+        (view.findViewById(R.id.ncalendar) as WeekCalendar).setOnWeekCalendarChangedListener(object : OnWeekCalendarChangedListener {
             override fun onWeekCalendarChanged(dateTime: DateTime?) {
                 mission.month = dateTime!!.monthOfYear;
                 mission.day = dateTime!!.dayOfMonth;
@@ -308,6 +373,11 @@ class MainActivity : AppCompatActivity() {
 
         })
         builder.create().show();
+
     }
+
+
+
+
 
 }
