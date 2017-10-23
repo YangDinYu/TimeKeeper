@@ -34,6 +34,7 @@ import org.joda.time.DateTime
 import com.necer.ncalendar.listener.OnCalendarChangedListener
 import com.necer.ncalendar.listener.OnClickWeekViewListener
 import com.necer.ncalendar.listener.OnWeekCalendarChangedListener
+import kotlinx.android.synthetic.main.activity_lock.*
 import kotlin.collections.ArrayList
 
 
@@ -134,9 +135,7 @@ class MainActivity : AppCompatActivity() {
         updateMission.setOnClickListener(object :View.OnClickListener{
             override fun onClick(p0: View?) {
                 updateData();
-                pagerAdapter.myFragment1?.recyclerView?.adapter?.notifyDataSetChanged();
-                pagerAdapter.myFragment2?.recyclerView?.adapter?.notifyDataSetChanged();
-                pagerAdapter.myFragment3?.recyclerView?.adapter?.notifyDataSetChanged();
+
 
             }
 
@@ -175,7 +174,7 @@ class MainActivity : AppCompatActivity() {
             return true;
         }
 
-
+        Toast.makeText(this,"keycode:"+keyCode,Toast.LENGTH_SHORT).show();
 
 
         return super.onKeyDown(keyCode, event)
@@ -185,6 +184,18 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         //unregisterReceiver(myReceiver);
+    }
+
+    fun saveDate(){
+        Message.missionList.clear();
+        Message.missionList.addAll(Message.missionListToday);
+        Message.missionList.addAll(Message.missionListTomorro);
+        Message.missionList.addAll(Message.missionListHoutian);
+
+        var gson = Gson();
+        var str = gson.toJson(Message.missionList);
+        editor.putString("MissionList",str);
+        editor.commit();
     }
 
     fun updateData() {
@@ -244,6 +255,20 @@ class MainActivity : AppCompatActivity() {
                 Message.missionListHoutian.add(obj);
                 Log.i("分配情况","后天");
             }
+        }
+        pagerAdapter.myFragment1?.recyclerView?.adapter?.notifyDataSetChanged();
+        pagerAdapter.myFragment2?.recyclerView?.adapter?.notifyDataSetChanged();
+        pagerAdapter.myFragment3?.recyclerView?.adapter?.notifyDataSetChanged();
+
+        if (Message.missionList.size>0){
+            header_title.text = "下一任务：${Message.missionListToday[0].missonName} " +
+                    "(${Message.missionListToday[0].startHour}:${Message.missionListToday[0].startMin} " +
+                    "- " +
+                    "${Message.missionListToday[0].startHour+(Message.missionListToday[0].duration/60)}:${Message.missionListToday[0].startMin+(Message.missionListToday[0].duration%60)})";
+            header_detail.text = "详细任务："+Message.missionListToday[0].missonDetail;
+        }else{
+            header_title.text = "下一任务：无";
+            header_detail.text = "详细任务：无";
         }
 
     }
@@ -356,9 +381,7 @@ class MainActivity : AppCompatActivity() {
                 editor.commit();
 
                 updateData();
-                pagerAdapter.myFragment1?.recyclerView?.adapter?.notifyDataSetChanged();
-                pagerAdapter.myFragment2?.recyclerView?.adapter?.notifyDataSetChanged();
-                pagerAdapter.myFragment3?.recyclerView?.adapter?.notifyDataSetChanged();
+
 
             }
 

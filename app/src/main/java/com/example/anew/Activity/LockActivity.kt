@@ -1,6 +1,7 @@
 package com.example.anew.Activity
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -11,6 +12,15 @@ import kotlinx.android.synthetic.main.activity_lock.*
 import rx.Observable
 import rx.Subscriber
 import java.util.*
+import android.content.Intent
+import android.content.BroadcastReceiver
+import android.content.IntentFilter
+
+
+
+
+
+
 
 /**
  * Created by 懵逼的杨定宇 on 2017/8/17.
@@ -27,6 +37,10 @@ class LockActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock);
+
+        lock_title.text = "${Message.missionListToday[0].missonName} " +
+                "(${Message.missionListToday[0].startHour+(Message.missionListToday[0].duration/60)}:${Message.missionListToday[0].startMin+(Message.missionListToday[0].duration%60)}结束)";
+        lock_detail.text = Message.missionListToday[0].missonDetail;
 
         pausebtn.setOnClickListener({
 
@@ -79,7 +93,12 @@ class LockActivity : Activity() {
             Message.isPause = !Message.isPause;
             Log.i("","change to pause");
         });
+
+
+
     }
+
+
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if(keyCode == KeyEvent.KEYCODE_BACK){
@@ -90,6 +109,12 @@ class LockActivity : Activity() {
         }
 
 
+
+
+
         return super.onKeyDown(keyCode, event)
     }
+
+
 }
+

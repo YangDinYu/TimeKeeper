@@ -2,6 +2,7 @@ package com.example.anew.Fragment
 
 
 import android.os.Bundle
+import android.os.Message
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -53,6 +54,8 @@ class MissionListFragment: Fragment() {
 
                     override fun onIndependentViewClicked(independentViewID: Int, position: Int) {
                         Toast.makeText(this@MissionListFragment.activity.applicationContext, "Button in row " + (position + 1) + " clicked!",Toast.LENGTH_SHORT).show();
+
+
                     }
                 })
                 .setSwipeOptionViews(R.id.delete)
@@ -63,6 +66,14 @@ class MissionListFragment: Fragment() {
                     }
                     message += " clicked for row " + (position + 1)
                     Toast.makeText(this@MissionListFragment.activity.applicationContext, message,Toast.LENGTH_SHORT).show();
+                    when(activity.view_pager.currentItem){
+                        0 -> com.example.anew.Message.missionListToday.removeAt(position);
+                        1 -> com.example.anew.Message.missionListTomorro.removeAt(position);
+                        2 -> com.example.anew.Message.missionListHoutian.removeAt(position);
+                    }
+
+                    (activity as MainActivity).saveDate();
+                    (activity as MainActivity).updateData();
                 })
         recyclerView.addOnItemTouchListener(onTouchListener)
         return view!!;
