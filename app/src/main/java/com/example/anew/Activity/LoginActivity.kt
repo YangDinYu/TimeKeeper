@@ -32,15 +32,15 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         var sp = applicationContext.getSharedPreferences("mysp", Context.MODE_PRIVATE);
         var editor = sp.edit();
+        /*
         if (sp.getString("loginPhoneNum","").length>0){
             startActivity(Intent(this@LoginActivity,MainActivity::class.java));
             finish();
         }
-
+        */
 
         BmobSMS.initialize(this,"3c9eebb309b4a67465abda4522db94e1");
         Bmob.initialize(this,"3c9eebb309b4a67465abda4522db94e1");
-
 
         LoginButton.setOnClickListener({
             val query = BmobQuery<User>()
@@ -57,9 +57,11 @@ class LoginActivity : AppCompatActivity() {
                             //获得playerName的信息
                             Toast.makeText(this@LoginActivity,user.mobilePhoneNumber+","+user.password,Toast.LENGTH_SHORT).show();
                             if (user.mobilePhoneNumber.equals(phoneNum.text.toString()) && user.password.equals(Password.text.toString())){
-                                startActivity(Intent(this@LoginActivity,MainActivity::class.java));
+
                                 //利用shareperference记录账号，自动登录
                                 editor.putString("loginPhoneNum",user.mobilePhoneNumber);
+                                editor.commit();
+                                startActivity(Intent(this@LoginActivity,MainActivity::class.java));
                                 finish();
                             }
 

@@ -4,6 +4,7 @@ import android.app.ActivityManager
 import android.app.Service
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,6 +12,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
+import android.service.notification.NotificationListenerService
+import android.service.notification.StatusBarNotification
 import android.util.Log
 import android.widget.Toast
 import com.example.anew.Activity.HomeActivity
@@ -25,13 +28,36 @@ import java.util.*
  * Created by 懵逼的杨定宇 on 2017/5/13.
  */
 
-class checkService : Service() {
+class checkService : NotificationListenerService() {
+
+    lateinit var sp : SharedPreferences;
+    lateinit var editor:SharedPreferences.Editor;
+    internal lateinit var mUsageStatsManager: UsageStatsManager
+
+    override fun onListenerConnected() {
+        Toast.makeText(applicationContext,"NotificationListener连接成功",Toast.LENGTH_SHORT).show();
+        super.onListenerConnected()
+    }
+
+    override fun onListenerDisconnected() {
+        Toast.makeText(applicationContext,"NotificationListener连接断开",Toast.LENGTH_SHORT).show();
+        super.onListenerDisconnected()
+    }
+
+    override fun onBind(intent: Intent?): IBinder {
+        return super.onBind(intent)
+    }
+    override fun onNotificationPosted(sbn: StatusBarNotification?) {
+
+    }
+
+    override fun onNotificationRemoved(sbn: StatusBarNotification?) {
+
+    }
 
     var timered:Boolean = false;
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
+
 
     //更新任务列表
     fun updateData() {
@@ -56,15 +82,14 @@ class checkService : Service() {
         var min = time.minute;
         Log.i("时间信息","2017.$month . $day,$hour:$min");
 
+
         while (Message.missionList.size>0 && Message.missionList[0]!=null){
             if (Message.missionList[0].month<month || Message.missionList[0].day<day ){
                 Message.missionList.removeAt(0);
 
-
             }
             if((Message.missionList[0].month==month && Message.missionList[0].day==day && ((hour-Message.missionList[0].startHour)*60 +min-Message.missionList[0].startMin-Message.missionList[0].duration)>0)){
                 Message.missionList.removeAt(0);
-
 
             }else{
                 break;
@@ -100,6 +125,9 @@ class checkService : Service() {
         Toast.makeText(applicationContext,"onStartCommand（）",Toast.LENGTH_SHORT).show();
         //manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
 
+        var thisComponent = ComponentName(this, /*getClass()*/ checkService::class.java);
+
+
         updateData()
         //该service未初始化才启动相应的timer
         if (!timered) {
@@ -109,7 +137,6 @@ class checkService : Service() {
                 override fun run() {
 
                     packName = getTopActivity();
-                    //Log.i("test", packName)
 
                     //处理锁定期间但暂停（休息）时的逻辑；
                     if (Message.isLock && Message.isPause) {
@@ -124,12 +151,9 @@ class checkService : Service() {
 
                     //处理锁定期间的逻辑
                     if (Message.isLock && !Message.isPause && "com.example.anew" != packName && packName != "888") {
-
-
                         try {
                             //forceStopPackage(packName,getApplicationContext());
                             //manager.killBackgroundProcesses(packName);
-
 
                             //另外还需要判定是否是桌面程序
                             try {
@@ -139,10 +163,8 @@ class checkService : Service() {
                                 val cmd = "am force-stop $packName \n"
                                 out.write(cmd.toByteArray())
                                 out.flush()
-
                                 val intent2 = Intent(this@checkService, HomeActivity::class.java)
                                 intent2.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-
                                 startActivity(intent2)
                             } catch (e: IOException) {
                                 e.printStackTrace()
@@ -151,9 +173,7 @@ class checkService : Service() {
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
-
                     }
-
                     //killOthers(getApplicationContext());
                 }
             }
@@ -175,15 +195,16 @@ class checkService : Service() {
                     var min = time.minute;
                     //Log.i("表达式测试：","${Message.missionList.size },${Message.missionList[0]?.isLock == true},${Message.missionList[0]?.month == month},${ Message.missionList[0]?.day == day},${hour>Message.missionList[0]?.startHour},${min>Message.missionList[0]?.startMin},${((hour - Message.missionList[0]?.startHour) * 60 + min - Message.missionList[0]?.startMin - Message.missionList[0]?.duration) < 0},");
                     if (Message.missionList.size > 0
-                            && Message.missionList[0].isLock == true
                             && Message.missionList[0].month == month
                             && Message.missionList[0].day == day
-                            && hour>=Message.missionList[0].startHour
-                            && min>=Message.missionList[0].startMin
+                            && hour*60+min>=Message.missionList[0].startHour*60+Message.missionList[0].startMin
+
                             && ((hour - Message.missionList[0].startHour) * 60 + min - Message.missionList[0].startMin - Message.missionList[0].duration) < 0) {
-                        Message.isLock = true;
 
-
+                        if(Message.missionList[0].isLock == true) {
+                            Message.isLock = true;
+                        }
+                        Message.isMission = true;
 
                         Log.i("", "处于第一个任务之中，开始锁定");
                     }
@@ -194,6 +215,7 @@ class checkService : Service() {
                             && Message.missionList[0].day <= day
                             && ((hour - Message.missionList[0].startHour) * 60 + min - Message.missionList[0].startMin - Message.missionList[0].duration) >= 0) {
                         Message.isLock = false;
+                        Message.isMission = false;
                         Message.missionList.removeAt(0);
                         editor.putString("MissionList", Gson().toJson(Message.missionList));
                         editor.commit();
@@ -212,9 +234,7 @@ class checkService : Service() {
         return super.onStartCommand(intent, flags, startId)
     }
 
-    lateinit var sp : SharedPreferences;
-    lateinit var editor:SharedPreferences.Editor;
-    internal lateinit var mUsageStatsManager: UsageStatsManager
+
     override fun onCreate() {
         Toast.makeText(applicationContext,"onCreate（）",Toast.LENGTH_SHORT).show();
 

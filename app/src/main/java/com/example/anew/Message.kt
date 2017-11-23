@@ -6,6 +6,7 @@ import android.content.Context
  * Created by 懵逼的杨定宇 on 2017/8/17.
  */
 object Message{
+    public var isMission : Boolean = false;
     public var isLock : Boolean = false;
     public var isPause : Boolean = false;
     public var restTime : Int = 20;

@@ -1,10 +1,8 @@
 package com.example.anew.Activity
 
 import android.app.Application
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +23,8 @@ import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AlertDialog
 import android.view.*
 import android.widget.*
+import cn.bmob.sms.BmobSMS
+import cn.bmob.v3.Bmob
 import com.example.anew.*
 import com.necer.ncalendar.calendar.WeekCalendar
 
@@ -49,11 +49,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState);
         this.getWindow().setFlags(FLAG_HOMEKEY_DISPATCHED,FLAG_HOMEKEY_DISPATCHED);
         setContentView(R.layout.activity_main);
-
+        BmobSMS.initialize(this,"3c9eebb309b4a67465abda4522db94e1");
+        Bmob.initialize(this,"3c9eebb309b4a67465abda4522db94e1");
 
 
          sp = applicationContext.getSharedPreferences("mysp", Context.MODE_PRIVATE);
          editor = sp.edit();
+
+
+        if (!(sp.getString("loginPhoneNum","").length>0)){
+            startActivity(Intent(this@MainActivity,LoginActivity::class.java));
+            finish();
+        }
+
 
         scrollable_layout.setDraggableView(indicator);
 
@@ -141,11 +149,24 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+        logoff.setOnClickListener({
+            editor.putString("loginPhoneNum","");
+            editor.commit();
+            startActivity(Intent(this@MainActivity,LoginActivity::class.java));
+        })
+
         seeMission.setOnClickListener({
+            Log.d("", "toggleNotificationListenerService() called");
+            var thisComponent = ComponentName(this, /*getClass()*/ checkService::class.java);
+            var pm = getPackageManager();
+            pm.setComponentEnabledSetting(thisComponent, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+            pm.setComponentEnabledSetting(thisComponent, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+
+
             Log.i("Len",""+ Message.missionList.size)
             Log.i("sp",sp.getString("MissionList",""))
             for (mission: Misson in Message.missionList){
-
+                Toast.makeText(this@MainActivity,""+Message.isMission,Toast.LENGTH_SHORT).show();
                 Toast.makeText(applicationContext,"任务，"+"${Message.missionList[0].month} , ${Message.missionList[0].day} , ${Message.missionList[0].startHour} , ${Message.missionList[0].startMin}, 持续时间 ${Message.missionList[0].duration}",Toast.LENGTH_SHORT).show();
             }
         })
@@ -260,7 +281,7 @@ class MainActivity : AppCompatActivity() {
         pagerAdapter.myFragment2?.recyclerView?.adapter?.notifyDataSetChanged();
         pagerAdapter.myFragment3?.recyclerView?.adapter?.notifyDataSetChanged();
 
-        if (Message.missionList.size>0){
+        if (Message.missionListToday.size>0){
             header_title.text = "下一任务：${Message.missionListToday[0].missonName} " +
                     "(${Message.missionListToday[0].startHour}:${Message.missionListToday[0].startMin} " +
                     "- " +
@@ -382,7 +403,6 @@ class MainActivity : AppCompatActivity() {
 
                 updateData();
 
-
             }
 
         })
@@ -398,7 +418,6 @@ class MainActivity : AppCompatActivity() {
         builder.create().show();
 
     }
-
 
 
 

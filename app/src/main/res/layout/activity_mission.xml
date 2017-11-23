@@ -25,7 +25,7 @@
         android:src="@mipmap/blackboard" />
 
         <TextView
-            android:id="@+id/lock_title"
+            android:id="@+id/lock_title2"
             android:layout_marginTop="100dp"
             android:layout_marginLeft="29dp"
             android:layout_marginRight="29dp"
@@ -36,8 +36,8 @@
             android:textColor="#ffffff"/>
 
         <TextView
-            android:layout_below="@id/lock_title"
-            android:id="@+id/lock_detail"
+            android:layout_below="@id/lock_title2"
+            android:id="@+id/lock_detail2"
             android:layout_marginLeft="29dp"
             android:layout_marginRight="29dp"
             android:layout_marginTop="5dip"
@@ -48,28 +48,6 @@
             android:textColor="#ffffff"/>
     </RelativeLayout>
 
-    <ImageButton
-        android:id="@+id/unlock"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_above="@+id/pausebtn"
-        android:layout_alignStart="@+id/pausebtn"
-        android:background="@mipmap/lock" />
-        <com.dd.processbutton.iml.SubmitProcessButton
-            android:layout_marginLeft="29dp"
-            android:layout_marginRight="29dp"
-            android:layout_marginBottom="29dp"
-
-            android:layout_alignParentBottom="true"
-            android:id="@+id/pausebtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:text="2:30"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            >
-        </com.dd.processbutton.iml.SubmitProcessButton>
 
 
 

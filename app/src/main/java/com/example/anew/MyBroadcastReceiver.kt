@@ -6,6 +6,7 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import com.example.anew.Activity.MainActivity
+import com.example.anew.Activity.MissonActivity
 
 
 /**
@@ -28,14 +29,19 @@ class MyBroadcastReceiver:BroadcastReceiver(){
             Log.i("test","打开屏幕");
         }
 
+
         if (p1?.action == Intent.ACTION_USER_PRESENT){
-            val intent2 = Intent(p0, MainActivity::class.java)
+            if(Message.isMission ==true){
+                val intent2 = Intent(p0, MissonActivity::class.java)
+                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                p0?.startActivity(intent2)
+            }
+
             val intent = Intent(p0, checkService::class.java)
-            intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            p0?.startActivity(intent2)
             p0?.startService(intent);
             Log.i("test","打开屏幕~~");
         }
+
     }
 
 

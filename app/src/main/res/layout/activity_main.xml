@@ -146,6 +146,16 @@
 
                     />
 
+            <TextView
+                android:drawableLeft="@mipmap/coupon"
+                style="@style/MenuText"
+                android:text="注销"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/logoff"
+
+                />
+
 
         </com.github.mzule.fantasyslide.SideBar>
         <!-- 如果需要的话，可以添加右侧边栏-->

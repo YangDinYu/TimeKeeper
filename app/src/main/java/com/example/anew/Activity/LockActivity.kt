@@ -1,7 +1,7 @@
 package com.example.anew.Activity
 
 import android.app.Activity
-import android.content.Context
+import android.content.*
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -12,14 +12,20 @@ import kotlinx.android.synthetic.main.activity_lock.*
 import rx.Observable
 import rx.Subscriber
 import java.util.*
-import android.content.Intent
-import android.content.BroadcastReceiver
-import android.content.IntentFilter
-
-
-
-
-
+import android.support.v7.app.AlertDialog
+import android.view.LayoutInflater
+import android.widget.Button
+import android.widget.EditText
+import cn.bmob.sms.BmobSMS
+import cn.bmob.sms.exception.BmobException
+import cn.bmob.sms.listener.RequestSMSCodeListener
+import cn.bmob.v3.Bmob
+import rx.Scheduler
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
+import cn.bmob.sms.listener.VerifySMSCodeListener
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.messageforunlock_layout.*
 
 
 /**
@@ -37,6 +43,9 @@ class LockActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock);
+
+        BmobSMS.initialize(this,"3c9eebb309b4a67465abda4522db94e1");
+        Bmob.initialize(this,"3c9eebb309b4a67465abda4522db94e1");
 
         lock_title.text = "${Message.missionListToday[0].missonName} " +
                 "(${Message.missionListToday[0].startHour+(Message.missionListToday[0].duration/60)}:${Message.missionListToday[0].startMin+(Message.missionListToday[0].duration%60)}结束)";
@@ -94,6 +103,56 @@ class LockActivity : Activity() {
             Log.i("","change to pause");
         });
 
+
+        unlock.setOnClickListener({
+            var builder = AlertDialog.Builder(this@LockActivity);
+            val view = LayoutInflater.from(this@LockActivity).inflate(R.layout.messageforunlock_layout, null, false);
+            builder.setView(view);
+            builder.setTitle("短信解锁")
+
+            var sendMessageButton = view.findViewById(R.id.sendMessage) as Button;
+            var yanzhengma = view.findViewById(R.id.jiesuoyanzhengma) as EditText;
+            sendMessageButton.setOnClickListener({
+                BmobSMS.requestSMSCode(this@LockActivity,"15528351376","默认",object :RequestSMSCodeListener(){
+                    override fun done(p0: Int?, p1: BmobException?) {
+
+                        Toast.makeText(this@LockActivity,"发送短信成功",Toast.LENGTH_SHORT).show()
+                    }
+
+                })
+
+            })
+
+            builder.setPositiveButton("解锁",object : DialogInterface.OnClickListener{
+                override fun onClick(p0: DialogInterface?, p1: Int) {
+                    BmobSMS.verifySmsCode(this@LockActivity, "15528351376", yanzhengma.text.toString(), object : VerifySMSCodeListener() {
+
+                        override fun done(ex: BmobException?) {
+
+                            if (ex == null) {//短信验证码已验证成功
+                                Toast.makeText(this@LockActivity,"验证成功，解锁",Toast.LENGTH_SHORT).show()
+                                Message.isLock = false;
+                                Message.missionList[0].isLock = false;
+                                startActivity(Intent(this@LockActivity,MainActivity::class.java));
+
+                            } else {
+                                Log.i("bmob", "验证失败：code =" + ex.errorCode + ",msg = " + ex.localizedMessage)
+                            }
+                        }
+                    })
+
+                }
+            })
+
+            builder.setNegativeButton("取消",object : DialogInterface.OnClickListener{
+                override fun onClick(p0: DialogInterface?, p1: Int) {
+
+                }
+
+            })
+
+            builder.create().show();
+        })
 
 
     }
