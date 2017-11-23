@@ -35,55 +35,9 @@
         android:layout_alignBottom="@+id/verificationcode"
         android:layout_alignStart="@+id/verificationcode" />
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_marginLeft="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="40dip"
-        android:layout_marginTop="15dp"
-        android:paddingLeft="60dp"
-        android:inputType="textPassword"
 
-        android:layout_marginRight="30dp"
-        android:layout_below="@+id/verificationcode" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="密码"
-        android:textSize="8pt"
-        android:textColor="@android:color/darker_gray"
-        android:layout_alignLeft="@+id/password"
-        android:layout_alignTop="@+id/password"
 
-        android:layout_marginTop="9dip"
-
-        android:layout_marginLeft="3dip"
-        android:id="@+id/textView2" />
-
-    <EditText
-        android:id="@+id/repeatPassword"
-        android:layout_marginLeft="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="40dip"
-        android:layout_marginTop="15dp"
-        android:paddingLeft="60dp"
-        android:inputType="textPassword"
-        android:layout_marginRight="30dp"
-        android:layout_below="@+id/password" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="重复密码"
-        android:textSize="8pt"
-        android:textColor="@android:color/darker_gray"
-        android:layout_alignLeft="@+id/repeatPassword"
-        android:layout_alignTop="@+id/repeatPassword"
-
-        android:layout_marginTop="9dip"
-
-        android:layout_marginLeft="3dip"/>
 
 
 
@@ -94,11 +48,11 @@
         android:id="@+id/registButton"
         android:layout_width="match_parent"
         android:layout_height="35dip"
-        android:layout_below="@+id/repeatPassword"
+        android:layout_below="@+id/verificationcode"
         android:layout_alignLeft="@+id/repeatPassword"
         android:layout_alignRight="@+id/repeatPassword"
         android:layout_marginTop="20dip"
-
+        android:layout_margin="20dp"
         android:background="@drawable/fillet_shape"
         android:text="注册"
         android:textColor="@android:color/white"/>
