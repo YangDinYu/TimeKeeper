@@ -56,8 +56,9 @@ class MainActivity : AppCompatActivity() {
          sp = applicationContext.getSharedPreferences("mysp", Context.MODE_PRIVATE);
          editor = sp.edit();
 
-
-        if (!(sp.getString("loginPhoneNum","").length>0)){
+        Message.myPhoneNum = sp.getString("loginPhoneNum","");
+        Message.contactsPhoneNum =sp.getString("contactsPhoneNum","");
+        if (!(Message.myPhoneNum.length>0)){
             startActivity(Intent(this@MainActivity,LoginActivity::class.java));
             finish();
         }

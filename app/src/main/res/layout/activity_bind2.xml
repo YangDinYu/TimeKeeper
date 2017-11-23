@@ -14,7 +14,7 @@
         android:layout_centerHorizontal="true"
         />
     <EditText
-        android:id="@+id/verificationcode"
+        android:id="@+id/verificationcode_bind"
         android:layout_marginLeft="30dp"
         android:layout_width="match_parent"
         android:layout_height="40dip"
@@ -31,9 +31,9 @@
         android:textSize="8pt"
         android:textColor="@android:color/darker_gray"
 
-        android:layout_alignBaseline="@+id/verificationcode"
-        android:layout_alignBottom="@+id/verificationcode"
-        android:layout_alignStart="@+id/verificationcode" />
+        android:layout_alignBaseline="@+id/verificationcode_bind"
+        android:layout_alignBottom="@+id/verificationcode_bind"
+        android:layout_alignStart="@+id/verificationcode_bind" />
 
 
 
@@ -45,16 +45,15 @@
 
 
     <Button
-        android:id="@+id/registButton"
+        android:id="@+id/registButton_bind"
         android:layout_width="match_parent"
         android:layout_height="35dip"
-        android:layout_below="@+id/verificationcode"
-        android:layout_alignLeft="@+id/repeatPassword"
-        android:layout_alignRight="@+id/repeatPassword"
+        android:layout_below="@+id/verificationcode_bind"
+
         android:layout_marginTop="20dip"
         android:layout_margin="20dp"
         android:background="@drawable/fillet_shape"
-        android:text="注册"
+        android:text="绑定联系人"
         android:textColor="@android:color/white"/>
 
 </RelativeLayout>

@@ -10,5 +10,5 @@ class User() : BmobObject() {
     var password:String = "";
     var mobilePhoneNumber:String = "";
     var email: String = "";
-
+    var ContactsPhoneNum:String = "";
 }

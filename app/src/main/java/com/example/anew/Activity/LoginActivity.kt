@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Message
 import android.util.Log
 import android.widget.Toast
 import cn.bmob.sms.BmobSMS
@@ -60,6 +61,9 @@ class LoginActivity : AppCompatActivity() {
 
                                 //利用shareperference记录账号，自动登录
                                 editor.putString("loginPhoneNum",user.mobilePhoneNumber);
+                                com.example.anew.Message.myPhoneNum = user.mobilePhoneNumber;
+                                editor.putString("contactsPhoneNum",user.ContactsPhoneNum);
+                                com.example.anew.Message.contactsPhoneNum = user.ContactsPhoneNum;
                                 editor.commit();
                                 startActivity(Intent(this@LoginActivity,MainActivity::class.java));
                                 finish();
