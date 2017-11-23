@@ -13,6 +13,18 @@
         android:layout_marginTop="65dip"
         android:layout_centerHorizontal="true"
         />
+
+    <TextView
+        android:layout_below="@+id/myImage"
+        android:layout_marginLeft="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="60dp"
+        android:inputType="number"
+        android:layout_marginRight="30dp"
+        android:id="@+id/oldphoneNum"
+        android:text="已绑定联系人:15528351376"/>
     <EditText
         android:id="@+id/phoneNum"
         android:layout_marginLeft="30dp"
@@ -22,13 +34,13 @@
         android:paddingLeft="60dp"
         android:inputType="number"
         android:layout_marginRight="30dp"
-        android:layout_below="@+id/myImage"
+        android:layout_below="@+id/oldphoneNum"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="手机号"
+        android:text="新联系人手机号"
         android:textSize="8pt"
         android:textColor="@android:color/darker_gray"
         android:layout_alignLeft="@+id/phoneNum"
